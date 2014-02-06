@@ -11,7 +11,8 @@
 #undef  HAS_RF_ROUTER                   // PROGMEM:  920b  RAM: 38b
 #undef  HAS_LONGMSG                     // CUR support     RAM: 20b
 
-#define CSMV4
+//#define CSMV4
+#define CSMV3
 //#define TUXRAIL
 //#define TUXRADIO
 
@@ -81,8 +82,10 @@
 
 #else
 
-#define FHTBUF_SIZE             74      //                 RAM: 74b
-#define RCV_BUCKETS             2       //                 RAM: 25b / bucket
+//#define FHTBUF_SIZE             74      //                 RAM: 74b
+//#define RCV_BUCKETS             2       //                 RAM: 25b / bucket
+#define FHTBUF_SIZE             174      //                 RAM: 74b
+#define RCV_BUCKETS             4       //                 RAM: 25b / bucket
 
 #define SPI_PORT		PORTB
 #define SPI_DDR			DDRB

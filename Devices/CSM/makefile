@@ -1,6 +1,7 @@
 #MCU = atmega644p
-MCU = atmega1284p
+#MCU = atmega1284p
 #MCU = atmega324p
+MCU = atmega328p
 BOARD  =
 F_CPU = 8000000
 FORMAT = ihex
