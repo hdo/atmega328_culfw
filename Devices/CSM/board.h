@@ -101,13 +101,13 @@
 #define CC1100_CS_PORT          PORTD
 #define CC1100_CS_PIN		5
 
-#define CC1100_OUT_DDR		DDRC
-#define CC1100_OUT_PORT         PORTC
-#define CC1100_OUT_PIN          0
+#define CC1100_OUT_DDR		DDRC        // GDO0
+#define CC1100_OUT_PORT    PORTC
+#define CC1100_OUT_PIN     0
 
-#define CC1100_IN_DDR		DDRD
-#define CC1100_IN_PORT          PIND
-#define CC1100_IN_PIN           3
+#define CC1100_IN_DDR		DDRD        // GDO2
+#define CC1100_IN_PORT     PIND
+#define CC1100_IN_PIN      3
 #define CC1100_INT		INT1
 #define CC1100_INTVECT          INT1_vect
 #define CC1100_ISC		ISC10
