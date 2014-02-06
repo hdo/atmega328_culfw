@@ -95,7 +95,11 @@ sendraw(uint8_t *msg, uint8_t sync, uint8_t nbyte, uint8_t bitoff,
   }
   credit_10ms -= sum;
 
+#ifdef LED_INV_RGB
+  LED_RED_ON();
+#else
   LED_ON();
+#endif
 
   #if defined (HAS_IRRX) || defined (HAS_IRTX) //Blockout IR_Reception for the moment
     cli();
@@ -145,7 +149,11 @@ sendraw(uint8_t *msg, uint8_t sync, uint8_t nbyte, uint8_t bitoff,
       rf_moritz_init();
 #endif
 
+#ifdef LED_INV_RGB
+  LED_RED_OFF();
+#else
   LED_OFF();
+#endif
 }
 
 static int

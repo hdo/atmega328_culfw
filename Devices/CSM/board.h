@@ -11,8 +11,10 @@
 #undef  HAS_RF_ROUTER                   // PROGMEM:  920b  RAM: 38b
 #undef  HAS_LONGMSG                     // CUR support     RAM: 20b
 
+
+#define ARDUINO_MINI_PRO
 //#define CSMV4
-#define CSMV3
+//#define CSMV3
 //#define TUXRAIL
 //#define TUXRADIO
 
@@ -86,6 +88,15 @@
 //#define RCV_BUCKETS             2       //                 RAM: 25b / bucket
 #define FHTBUF_SIZE             174      //                 RAM: 74b
 #define RCV_BUCKETS             4       //                 RAM: 25b / bucket
+#define RFR_DEBUG                     // PROGMEM:  354b  RAM: 14b
+#define FULL_CC1100_PA                // PROGMEM:  108b
+#define HAS_RAWSEND                   //
+#define HAS_FASTRF                    // PROGMEM:  468b  RAM:  1b
+#define HAS_ASKSIN
+#define HAS_MORITZ
+#define HAS_ESA
+#define HAS_INTERTECHNO
+
 
 #define SPI_PORT		PORTB
 #define SPI_DDR			DDRB
@@ -95,6 +106,33 @@
 #define SPI_SCLK		5
 
 #endif
+
+#ifdef ARDUINO_MINI_PRO
+#define CC1100_CS_DDR		SPI_DDR
+#define CC1100_CS_PORT     SPI_PORT
+#define CC1100_CS_PIN		SPI_SS
+
+#define CC1100_OUT_DDR		DDRC        // GDO0
+#define CC1100_OUT_PORT    PORTC
+#define CC1100_OUT_PIN     0
+
+#define CC1100_IN_DDR		DDRC        // GDO2
+#define CC1100_IN_PORT     PINC
+#define CC1100_IN_PIN      1
+#define CC1100_INT		INT1
+#define CC1100_INTVECT          INT1_vect
+#define CC1100_ISC		ISC10
+#define CC1100_EICR             EICRA
+
+#define LED_INV_RGB
+#define LED_DDR                 DDRD
+#define LED_PORT                PORTD
+#define LED_PIN                 6
+#define LED_PIN_GREEN           4
+#define LED_PIN_RED             5
+#define LED_PIN_BLUE            6
+#endif
+
 
 #ifdef CSMV3
 #define CC1100_CS_DDR		DDRD

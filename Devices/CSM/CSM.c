@@ -119,7 +119,15 @@ main(void)
 #endif
 
   led_init();
+
+#ifdef LED_INV_RGB
+  LED_GREEN_ON();
+  LED_RED_ON();
+  LED_BLUE_ON();
+#else
   LED_ON();
+#endif
+
 
   spi_init();
 
@@ -176,7 +184,12 @@ main(void)
   display_channel |= DISPLAY_DOGM;
 #endif
 
+#ifdef LED_INV_RGB
+  LED_RED_OFF();
+  LED_BLUE_OFF();
+#else
   LED_OFF();
+#endif
 
   sei();
 
