@@ -127,10 +127,10 @@
 #define LED_INV_RGB
 #define LED_DDR                 DDRD
 #define LED_PORT                PORTD
-#define LED_PIN                 6
+#define LED_PIN                 2
 #define LED_PIN_GREEN           4
-#define LED_PIN_RED             5
-#define LED_PIN_BLUE            6
+#define LED_PIN_RED             3
+#define LED_PIN_BLUE            2
 #endif
 
 
