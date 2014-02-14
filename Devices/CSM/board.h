@@ -1,8 +1,8 @@
 #ifndef _BOARD_H
 #define _BOARD_H
 
-#define HAS_FHT_8v                      // PROGMEM:  434b, RAM: 19b
-#define HAS_FHT_80b                     // PROGMEM: 1158b, RAM:  5b
+//#define HAS_FHT_8v                      // PROGMEM:  434b, RAM: 19b
+//#define HAS_FHT_80b                     // PROGMEM: 1158b, RAM:  5b
 
 #undef  FULL_CC1100_PA                  // PROGMEM:  108b
 
@@ -12,8 +12,8 @@
 #undef  HAS_LONGMSG                     // CUR support     RAM: 20b
 
 
-#define HOMEMATIC_BATTERY_ACTOR
-//#define ARDUINO_MINI_PRO
+//#define HOMEMATIC_BATTERY_ACTOR
+#define ARDUINO_MINI_PRO
 //#define CSMV4
 //#define CSMV3
 //#define TUXRAIL
@@ -95,8 +95,8 @@
 #define HAS_FASTRF                    // PROGMEM:  468b  RAM:  1b
 #define HAS_ASKSIN
 #define HAS_MORITZ
-#define HAS_ESA
-#define HAS_INTERTECHNO
+//#define HAS_ESA
+//#define HAS_INTERTECHNO
 
 
 #define SPI_PORT		PORTB
@@ -125,7 +125,7 @@
 #define CC1100_ISC		ISC10
 #define CC1100_EICR             EICRA
 
-//#define LED_INV_RGB
+#define LED_INV_RGB
 #define LED_DDR                 DDRD
 #define LED_PORT                PORTD
 #define LED_PIN                 2

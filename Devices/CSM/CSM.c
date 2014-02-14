@@ -48,6 +48,11 @@
 #include "ir.h"
 #endif
 
+#ifdef HAS_MORITZ
+#include "rf_moritz.h"
+#endif
+
+
 const PROGMEM t_fntab fntab[] = {
 
   { 'm', getfreemem },
@@ -88,6 +93,9 @@ const PROGMEM t_fntab fntab[] = {
   { 'u', rf_router_func },
 #endif
   { 'x', ccsetpa },
+#ifdef HAS_MORITZ
+  { 'Z', moritz_func },
+#endif
 
   { 0, 0 },
 };
@@ -210,5 +218,7 @@ main(void)
     ir_task();
 #endif
   }
-
+#ifdef HAS_MORITZ
+    rf_moritz_task();
+#endif
 }
