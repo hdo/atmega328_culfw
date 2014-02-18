@@ -36,9 +36,11 @@ void led_signal(uint8_t channel, uint32_t timeout) {
 		led_timeout[channel] = timeout;
 		led_msticks[channel] = led_current_msticks;
 		led_on(channel);
+		/*
 		if (channel == LED_CHANNEL_RED || channel == LED_CHANNEL_BLUE) {
 			led_off(LED_CHANNEL_GREEN);
 		}
+		*/
 	}
 }
 
@@ -51,9 +53,10 @@ void led_process(uint32_t msticks) {
 				led_timeout[i] = 0;
 				led_msticks[i] = 0;
 				led_off(i);
+				/*
 				if (i == LED_CHANNEL_RED || i == LED_CHANNEL_BLUE) {
 					led_on(LED_CHANNEL_GREEN);
-				}
+				}*/
 			}
 		}
 	}

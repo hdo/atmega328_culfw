@@ -208,6 +208,8 @@ main(void)
   sei();
 
   for(;;) {
+	led_process(ticks);
+
     uart_task();
     RfAnalyze_Task();
     Minute_Task();

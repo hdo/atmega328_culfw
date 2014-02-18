@@ -75,6 +75,8 @@ rf_asksin_init(void)
   led_off(LED_CHANNEL_GREEN);
   my_delay_ms(100);
   led_on(LED_CHANNEL_GREEN);
+  my_delay_ms(100);
+  led_off(LED_CHANNEL_GREEN);
 }
 
 void
@@ -92,7 +94,8 @@ rf_asksin_task(void)
   if (bit_is_set( CC1100_IN_PORT, CC1100_IN_PIN )) {
 
     enc[0] = cc1100_readReg( CC1100_RXFIFO ) & 0x7f; // read len
-    led_on(LED_CHANNEL_BLUE);
+    //led_on(LED_CHANNEL_BLUE);
+    led_signal(LED_CHANNEL_BLUE, 60);
 
     if (enc[0]>=MAX_ASKSIN_MSG)
          enc[0] = MAX_ASKSIN_MSG-1;
@@ -139,7 +142,7 @@ rf_asksin_task(void)
       
       DNL();
     }
-    led_off(LED_CHANNEL_BLUE);
+    //led_off(LED_CHANNEL_BLUE);
 
     return;
        

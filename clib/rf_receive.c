@@ -394,7 +394,8 @@ RfAnalyze_Task(void)
     return;
 
 #ifdef LED_RGB
-  led_on(LED_CHANNEL_BLUE);
+  //led_on(LED_CHANNEL_BLUE);
+  led_signal(LED_CHANNEL_BLUE, 200);
 #else
   LED_ON();
 #endif
@@ -539,7 +540,8 @@ RfAnalyze_Task(void)
     bucket_out = 0;
 
 #ifdef LED_RGB
-  led_off(LED_CHANNEL_BLUE);
+  //led_off(LED_CHANNEL_BLUE);
+  int jk=0;
 #else
   LED_OFF();
 #endif
