@@ -150,7 +150,8 @@ sendraw(uint8_t *msg, uint8_t sync, uint8_t nbyte, uint8_t bitoff,
 #endif
 
 #ifdef LED_INV_RGB
-  LED_RED_OFF();
+  //LED_RED_OFF();
+  uint8_t ijk=1;
 #else
   LED_OFF();
 #endif

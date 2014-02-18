@@ -68,6 +68,13 @@ rf_asksin_init(void)
   ccStrobe( CC1100_SCAL );
 
   my_delay_ms(1);
+  LED_GREEN_OFF();
+  my_delay_ms(100);
+  LED_GREEN_ON();
+  my_delay_ms(100);
+  LED_GREEN_OFF();
+  my_delay_ms(100);
+  LED_GREEN_ON();
 }
 
 void
@@ -85,6 +92,7 @@ rf_asksin_task(void)
   if (bit_is_set( CC1100_IN_PORT, CC1100_IN_PIN )) {
 
     enc[0] = cc1100_readReg( CC1100_RXFIFO ) & 0x7f; // read len
+    LED_BLUE_ON();
 
     if (enc[0]>=MAX_ASKSIN_MSG)
          enc[0] = MAX_ASKSIN_MSG-1;
@@ -131,6 +139,7 @@ rf_asksin_task(void)
       
       DNL();
     }
+    LED_BLUE_OFF();
 
     return;
        

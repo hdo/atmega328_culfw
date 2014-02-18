@@ -193,8 +193,12 @@ main(void)
 #endif
 
 #ifdef LED_INV_RGB
+  my_delay_ms(250);
   LED_RED_OFF();
+  my_delay_ms(250);
   LED_BLUE_OFF();
+  my_delay_ms(250);
+  LED_GREEN_OFF();
 #else
   LED_OFF();
 #endif

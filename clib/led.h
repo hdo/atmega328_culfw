@@ -21,7 +21,8 @@
 #endif
 #endif
 
-#define LED_TOGGLE() LED_PORT ^= _BV(LED_PIN)
+//#define LED_TOGGLE() LED_PORT ^= _BV(LED_PIN)
+#define LED_TOGGLE() LED_PORT |= 0
 
 #ifdef LED_INV
 #define LED_OFF()    LED_PORT |= _BV(LED_PIN)
