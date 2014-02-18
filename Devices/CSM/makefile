@@ -32,6 +32,8 @@ SRC = $(TARGET).c                                                    \
 		../../clib/serial.c                                  \
 		../../clib/ttydata.c                                 \
 		../../clib/spi.c                                     \
+		../../clib/led.c                                     \
+		../../clib/math_utils.c                                     		
 #		../../clib/dogm16x.c                                 \
 #		../../clib/ir.c                                      \
 #		../../clib/irmp.c                                    \

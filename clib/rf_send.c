@@ -95,8 +95,8 @@ sendraw(uint8_t *msg, uint8_t sync, uint8_t nbyte, uint8_t bitoff,
   }
   credit_10ms -= sum;
 
-#ifdef LED_INV_RGB
-  LED_RED_ON();
+#ifdef LED_RGB
+  led_on(LED_CHANNEL_RED);
 #else
   LED_ON();
 #endif
@@ -149,9 +149,8 @@ sendraw(uint8_t *msg, uint8_t sync, uint8_t nbyte, uint8_t bitoff,
       rf_moritz_init();
 #endif
 
-#ifdef LED_INV_RGB
-  //LED_RED_OFF();
-  uint8_t ijk=1;
+#ifdef LED_RGB
+    led_off(LED_CHANNEL_RED);
 #else
   LED_OFF();
 #endif

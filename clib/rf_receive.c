@@ -393,8 +393,8 @@ RfAnalyze_Task(void)
   if(bucket_nrused == 0)
     return;
 
-#ifdef LED_INV_RGB
-  LED_BLUE_ON();
+#ifdef LED_RGB
+  led_on(LED_CHANNEL_BLUE);
 #else
   LED_ON();
 #endif
@@ -538,8 +538,8 @@ RfAnalyze_Task(void)
   if(bucket_out == RCV_BUCKETS)
     bucket_out = 0;
 
-#ifdef LED_INV_RGB
-  LED_BLUE_OFF();
+#ifdef LED_RGB
+  led_off(LED_CHANNEL_BLUE);
 #else
   LED_OFF();
 #endif

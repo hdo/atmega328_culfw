@@ -53,6 +53,8 @@
 #endif
 
 
+volatile extern uint32_t ticks;  // 1/125 sec resolution // see clock.h
+
 const PROGMEM t_fntab fntab[] = {
 
   { 'm', getfreemem },
@@ -128,10 +130,10 @@ main(void)
 
   led_init();
 
-#ifdef LED_INV_RGB
-  LED_GREEN_ON();
-  LED_RED_ON();
-  LED_BLUE_ON();
+#ifdef LED_RGB
+  led_on(LED_CHANNEL_GREEN);
+  led_on(LED_CHANNEL_RED);
+  led_on(LED_CHANNEL_BLUE);
 #else
   LED_ON();
 #endif
@@ -192,13 +194,13 @@ main(void)
   display_channel |= DISPLAY_DOGM;
 #endif
 
-#ifdef LED_INV_RGB
+#ifdef LED_RGB
   my_delay_ms(250);
-  LED_RED_OFF();
+  led_off(LED_CHANNEL_RED);
   my_delay_ms(250);
-  LED_BLUE_OFF();
+  led_off(LED_CHANNEL_GREEN);
   my_delay_ms(250);
-  LED_GREEN_OFF();
+  led_off(LED_CHANNEL_BLUE);
 #else
   LED_OFF();
 #endif

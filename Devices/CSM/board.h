@@ -125,7 +125,7 @@
 #define CC1100_ISC		ISC10
 #define CC1100_EICR             EICRA
 
-#define LED_INV_RGB
+#define LED_RGB
 #define LED_DDR                 DDRD
 #define LED_PORT                PORTD
 #define LED_PIN                 2
@@ -152,7 +152,7 @@
 #define CC1100_ISC		ISC10
 #define CC1100_EICR             EICRA
 
-//#define LED_INV_RGB
+//#define LED_RGB
 #define LED_DDR                 DDRB
 #define LED_PORT                PORTB
 #define LED_PIN                 0
