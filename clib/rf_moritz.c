@@ -119,10 +119,6 @@ rf_moritz_init(void)
   led_on(LED_CHANNEL_GREEN);
   my_delay_ms(100);
   led_off(LED_CHANNEL_GREEN);
-  my_delay_ms(100);
-  led_on(LED_CHANNEL_GREEN);
-  my_delay_ms(100);
-  led_off(LED_CHANNEL_GREEN);
 }
 
 void

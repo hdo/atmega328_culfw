@@ -68,15 +68,15 @@ rf_asksin_init(void)
   ccStrobe( CC1100_SCAL );
 
   my_delay_ms(1);
-  led_off(LED_CHANNEL_GREEN);
+  led_off(LED_CHANNEL_BLUE);
   my_delay_ms(100);
-  led_on(LED_CHANNEL_GREEN);
+  led_on(LED_CHANNEL_BLUE);
   my_delay_ms(100);
-  led_off(LED_CHANNEL_GREEN);
+  led_off(LED_CHANNEL_BLUE);
   my_delay_ms(100);
-  led_on(LED_CHANNEL_GREEN);
+  led_on(LED_CHANNEL_BLUE);
   my_delay_ms(100);
-  led_off(LED_CHANNEL_GREEN);
+  led_off(LED_CHANNEL_BLUE);
 }
 
 void
