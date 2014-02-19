@@ -238,7 +238,6 @@ moritz_send(char *in)
 void
 moritz_sendraw(uint8_t *dec, int longPreamble)
 {
-  led_on(LED_CHANNEL_RED);
   uint8_t hblen = dec[0]+1;
   //1kb/s = 1 bit/ms. we send 1 sec preamble + hblen*8 bits
   uint32_t sum = (longPreamble ? 100 : 0) + (hblen*8)/10;
@@ -334,7 +333,6 @@ moritz_sendraw(uint8_t *dec, int longPreamble)
     set_txrestore();
   }
   lastSendingTicks = ticks;
-  led_off(LED_CHANNEL_RED);
 }
 
 void

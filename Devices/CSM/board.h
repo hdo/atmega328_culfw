@@ -1,8 +1,8 @@
 #ifndef _BOARD_H
 #define _BOARD_H
 
-//#define HAS_FHT_8v                      // PROGMEM:  434b, RAM: 19b
-//#define HAS_FHT_80b                     // PROGMEM: 1158b, RAM:  5b
+#define HAS_FHT_8v                      // PROGMEM:  434b, RAM: 19b
+#define HAS_FHT_80b                     // PROGMEM: 1158b, RAM:  5b
 
 #undef  FULL_CC1100_PA                  // PROGMEM:  108b
 
@@ -65,7 +65,9 @@
 #define FULL_CC1100_PA                // PROGMEM:  108b
 #define HAS_RAWSEND                   //
 #define HAS_FASTRF                    // PROGMEM:  468b  RAM:  1b
+#define HAS_RF_ROUTER                 // PROGMEM:  920b  RAM: 38b
 #define HAS_ASKSIN
+#define HAS_MORITZ
 #define HAS_ESA
 #define HAS_INTERTECHNO
 
@@ -85,18 +87,17 @@
 
 #else
 
-//#define FHTBUF_SIZE             74      //                 RAM: 74b
-//#define RCV_BUCKETS             2       //                 RAM: 25b / bucket
-#define FHTBUF_SIZE             174      //                 RAM: 74b
-#define RCV_BUCKETS             4       //                 RAM: 25b / bucket
+#define FHTBUF_SIZE          174      //                 RAM: 174b
+#define RCV_BUCKETS            4      //                 RAM: 25b * bucket
 #define RFR_DEBUG                     // PROGMEM:  354b  RAM: 14b
 #define FULL_CC1100_PA                // PROGMEM:  108b
 #define HAS_RAWSEND                   //
 #define HAS_FASTRF                    // PROGMEM:  468b  RAM:  1b
+#define HAS_RF_ROUTER                 // PROGMEM:  920b  RAM: 38b
 #define HAS_ASKSIN
 #define HAS_MORITZ
-//#define HAS_ESA
-//#define HAS_INTERTECHNO
+#define HAS_ESA
+#define HAS_INTERTECHNO
 
 
 #define SPI_PORT		PORTB

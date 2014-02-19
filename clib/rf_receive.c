@@ -38,6 +38,7 @@
 //  S300:   784/368 1152    304/864 1168
 //  FHT:    362/368  730    565/586 1151
 //  FS20:   376/357  733    592/578 1170
+//  Revolt:  96/208  304    224/208  432
 
 
 #define TSCALE(x)  (x/16)      // Scaling time to enable 8bit arithmetic
@@ -50,6 +51,8 @@
 #define STATE_COLLECT 3
 #define STATE_HMS     4
 #define STATE_ESA     5
+#define STATE_REVOLT  6
+#define STATE_IT      7
 
 uint8_t tx_report;              // global verbose / output-filter
 
@@ -71,9 +74,12 @@ static uint8_t bucket_nrused;             // Number of unprocessed buckets
 static uint8_t oby, obuf[MAXMSG], nibble; // parity-stripped output
 static uint8_t roby, robuf[MAXMSG];       // for Repeat check: buffer and time
 static uint32_t reptime;
+#ifdef LONG_PULSE
+static uint16_t hightime, lowtime;
+#else
 static uint8_t hightime, lowtime;
+#endif
 
-static uint8_t cksum3(uint8_t *buf, uint8_t len);
 static void addbit(bucket_t *b, uint8_t bit);
 static void delbit(bucket_t *b);
 static uint8_t wave_equals(wave_t *a, uint8_t htime, uint8_t ltime);
@@ -142,7 +148,7 @@ cksum2(uint8_t *buf, uint8_t len)               // EM
   return s;
 }
 
-static uint8_t
+uint8_t
 cksum3(uint8_t *buf, uint8_t len)               // KS300
 {
   uint8_t x = 0, y = 5, cnt = 0;
@@ -358,7 +364,51 @@ analyze_TX3(bucket_t *b)
   return 1;
 }
 #endif
+#ifdef HAS_IT
+uint8_t analyze_it(bucket_t *b)
+{
+  uint8_t i,j,itbit;
+  if (b->byteidx != 3 || b->bitidx != 7 || b->state != STATE_IT)
+    return 0;
+  /*oby=0;
+  obuf[oby]=0;
+  for (i=0;i<3;i++) {
+    for (j=0;j<8;j=j+2) {
+      obuf[oby]=obuf[oby]<<1;
+      itbit=(b->data[i]>>j)&3;
+      if (itbit == 1) {
+        obuf[oby] |= 1;
+      } else if (itbit>1)
+        return 0;
+    }
+    if (i==1) {
+      oby++;
+      obuf[oby]=0;
+    }
 
+  }
+  nibble=1;oby++;
+  */
+  for (oby=0;oby<3;oby++)
+    obuf[oby]=b->data[oby];
+  return 1;
+}
+#endif
+#ifdef HAS_REVOLT
+uint8_t analyze_revolt(bucket_t *b)
+{
+  uint8_t sum=0;
+  if (b->byteidx != 12 || b->state != STATE_REVOLT || b->bitidx != 0)
+    return 0;
+  for (oby=0;oby<11;oby++) {
+    sum+=b->data[oby];
+    obuf[oby]=b->data[oby];
+  }
+  if (sum!=b->data[11])
+      return 0;
+  return 1;
+}
+#endif
 //////////////////////////////////////////////////////////////////////
 void
 RfAnalyze_Task(void)
@@ -402,6 +452,17 @@ RfAnalyze_Task(void)
 
   b = bucket_array + bucket_out;
 
+#ifdef HAS_IT
+  if(!datatype && analyze_it(b))
+    datatype = TYPE_IT;
+#endif
+#ifdef HAS_REVOLT
+  if(!datatype && analyze_revolt(b))
+    datatype = TYPE_REVOLT;
+#endif
+#ifdef LONG_PULSE
+  if(b->state != STATE_REVOLT && b->state != STATE_IT) {
+#endif
 #ifdef HAS_ESA
   if(analyze_esa(b))
     datatype = TYPE_ESA;
@@ -461,7 +522,9 @@ RfAnalyze_Task(void)
     datatype = TYPE_HRM;
   }
 #endif
-
+#ifdef LONG_PULSE
+}
+#endif
   if(datatype && (tx_report & REP_KNOWN)) {
 
     uint8_t isrep = 0;
@@ -473,7 +536,7 @@ RfAnalyze_Task(void)
           if(robuf[roby] != obuf[roby])
             break;
 
-        if(roby == oby && ticks - reptime < 38) // 38/125 = 0.3 sec
+        if(roby == oby && (ticks - reptime < REPTIME)) // 38/125 = 0.3 sec
           isrep = 1;
       }
 
@@ -508,6 +571,7 @@ RfAnalyze_Task(void)
   }
 
 
+
   if(tx_report & REP_BITS) {
 
     DC('p');
@@ -539,10 +603,7 @@ RfAnalyze_Task(void)
   if(bucket_out == RCV_BUCKETS)
     bucket_out = 0;
 
-#ifdef LED_RGB
-  //led_off(LED_CHANNEL_BLUE);
-  int jk=0;
-#else
+#ifndef LED_RGB
   LED_OFF();
 #endif
 
@@ -565,8 +626,15 @@ reset_input(void)
 // data for SILENCE time, and we can put the data to be analysed
 ISR(TIMER1_COMPA_vect)
 {
+#ifdef LONG_PULSE
+  uint16_t tmp;
+#endif
   TIMSK1 = 0;                           // Disable "us"
-
+#ifdef LONG_PULSE
+  tmp=OCR1A;
+  OCR1A = TWRAP;                        // Wrap Timer
+  TCNT1=tmp;                            // reinitialize timer to measure times > SILENCE
+#endif
   if(tx_report & REP_MONITOR)
     DC('.');
 
@@ -654,7 +722,7 @@ delbit(bucket_t *b)
 //////////////////////////////////////////////////////////////////////
 // "Edge-Detected" Interrupt Handler
 ISR(CC1100_INTVECT)
-{
+{  
 #ifdef HAS_FASTRF
   if(fastrf_on) {
     fastrf_on = 2;
@@ -668,8 +736,12 @@ ISR(CC1100_INTVECT)
     return;
   }
 #endif
-
+#ifdef LONG_PULSE
+  uint16_t c = (TCNT1>>4);               // catch the time and make it smaller
+#else
   uint8_t c = (TCNT1>>4);               // catch the time and make it smaller
+#endif
+
   bucket_t *b = bucket_array+bucket_in; // where to fill in the bit
 
   if (b->state == STATE_HMS) {
@@ -722,13 +794,50 @@ ISR(CC1100_INTVECT)
   ///////////////////////
   // http://www.nongnu.org/avr-libc/user-manual/FAQ.html#faq_intbits
   TIFR1 = _BV(OCF1A);                 // clear Timers flags (?, important!)
+  
+#ifdef HAS_REVOLT
+  if ((hightime > TSCALE(9000)) && (hightime < TSCALE(12000)) &&
+      (lowtime  > TSCALE(150))   && (lowtime  < TSCALE(540))) {
+    // Revolt
+    b->zero.hightime = 6;
+    b->zero.lowtime = 14;
+    b->one.hightime = 19;
+    b->one.lowtime = 14;
+    b->sync=1;
+    b->state = STATE_REVOLT;
+    b->byteidx = 0;
+    b->bitidx  = 7;
+    b->data[0] = 0;
+    OCR1A = SILENCE;
+    TIMSK1 = _BV(OCIE1A);
+    return;
+  } 
+#endif
+#ifdef HAS_IT
+  if ((hightime < TSCALE(500)) &&  (hightime > TSCALE(200)) &&
+             (lowtime  < TSCALE(12160)) && (lowtime > TSCALE(9000))) {
+    // Intertechno
+    b->zero.hightime = hightime; 
+    b->zero.lowtime = hightime*3+1;
+    b->one.hightime = hightime*3+1;
+    b->one.lowtime = hightime;
+    b->sync=1;
+    b->state = STATE_IT;
+    b->byteidx = 0;
+    b->bitidx  = 7;
+    b->data[0] = 0;
+    OCR1A = SILENCE;
+    TIMSK1 = _BV(OCIE1A);
+    return;
+  }
+#endif
 
   if(b->state == STATE_RESET) {   // first sync bit, cannot compare yet
 
 retry_sync:
     if(hightime > TSCALE(1600) || lowtime > TSCALE(1600))
       return;
-
+  
     b->zero.hightime = hightime;
     b->zero.lowtime = lowtime;
     b->sync  = 1;
@@ -745,16 +854,15 @@ retry_sync:
     } else if(b->sync >= 4 ) {          // the one bit at the end of the 0-sync
 
       OCR1A = SILENCE;
-
       if (b->sync >= 12 && (b->zero.hightime + b->zero.lowtime) > TSCALE(1600)) {
         b->state = STATE_HMS;
 
 #ifdef HAS_ESA
       } else if (b->sync >= 10 && (b->zero.hightime + b->zero.lowtime) < TSCALE(600)) {
         b->state = STATE_ESA;
-	
-	OCR1A = 1000;
-	
+  
+  OCR1A = 1000;
+  
 #endif
 #ifdef HAS_RF_ROUTER
       } else if(rf_router_myid &&
@@ -788,8 +896,22 @@ retry_sync:
 
     }
 
-  } else {                              // STATE_COLLECT
+  } else 
+#ifdef HAS_REVOLT
+  if (b->state==STATE_REVOLT) { //STATE_REVOLT
 
+    if ((hightime < 11)) {
+      addbit(b,0);
+      b->zero.hightime = makeavg(b->zero.hightime, hightime);
+      b->zero.lowtime  = makeavg(b->zero.lowtime,  lowtime);
+    } else {
+      addbit(b,1);
+      b->one.hightime = makeavg(b->one.hightime, hightime);
+      b->one.lowtime  = makeavg(b->one.lowtime,  lowtime);
+    }
+  } else 
+#endif
+    {                              // STATE_COLLECT, STATE_IT
     if(wave_equals(&b->one, hightime, lowtime)) {
       addbit(b, 1);
       b->one.hightime = makeavg(b->one.hightime, hightime);
@@ -806,6 +928,7 @@ retry_sync:
     }
 
   }
+
 }
 
 uint8_t
