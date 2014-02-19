@@ -176,6 +176,8 @@ rf_moritz_task(void)
     //errata #1 does not affect us, because we wait until packet is completely received
     enc[0] = cc1100_readReg( CC1100_RXFIFO ) & 0x7f; // read len
 
+    led_signal(LED_CHANNEL_GREEN, 20);
+
     if (enc[0]>=MAX_MORITZ_MSG)
          enc[0] = MAX_MORITZ_MSG-1;
 
@@ -238,6 +240,8 @@ moritz_send(char *in)
 void
 moritz_sendraw(uint8_t *dec, int longPreamble)
 {
+  led_signal(LED_CHANNEL_RED, 20);
+
   uint8_t hblen = dec[0]+1;
   //1kb/s = 1 bit/ms. we send 1 sec preamble + hblen*8 bits
   uint32_t sum = (longPreamble ? 100 : 0) + (hblen*8)/10;

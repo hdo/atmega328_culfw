@@ -131,9 +131,9 @@ main(void)
   led_init();
 
 #ifdef LED_RGB
-  led_on(LED_CHANNEL_GREEN);
-  led_on(LED_CHANNEL_RED);
-  led_on(LED_CHANNEL_BLUE);
+  led_off(LED_CHANNEL_GREEN);
+  led_off(LED_CHANNEL_RED);
+  led_off(LED_CHANNEL_BLUE);
 #else
   LED_ON();
 #endif
@@ -195,11 +195,15 @@ main(void)
 #endif
 
 #ifdef LED_RGB
-  my_delay_ms(250);
+  my_delay_ms(200);
+  led_on(LED_CHANNEL_RED);
+  my_delay_ms(200);
   led_off(LED_CHANNEL_RED);
-  my_delay_ms(250);
+  led_on(LED_CHANNEL_GREEN);
+  my_delay_ms(200);
   led_off(LED_CHANNEL_GREEN);
-  my_delay_ms(250);
+  led_on(LED_CHANNEL_BLUE);
+  my_delay_ms(200);
   led_off(LED_CHANNEL_BLUE);
 #else
   LED_OFF();

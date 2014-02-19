@@ -134,6 +134,7 @@ rf_asksin_task(void)
   // see if a CRC OK pkt has been arrived
   if (bit_is_set( CC1100_IN_PORT, CC1100_IN_PIN )) {
     enc[0] = cc1100_readReg( CC1100_RXFIFO ) & 0x7f; // read len
+    led_signal(LED_CHANNEL_BLUE, 20);
 
     if (enc[0] >= MAX_ASKSIN_MSG) {
       // Something went horribly wrong, out of sync?
