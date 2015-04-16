@@ -99,11 +99,7 @@ sendraw(uint8_t *msg, uint8_t sync, uint8_t nbyte, uint8_t bitoff,
   }
   credit_10ms -= sum;
 
-#ifdef LED_RGB
-  led_on(LED_CHANNEL_RED);
-#else
   LED_ON();
-#endif
 
   #if defined (HAS_IRRX) || defined (HAS_IRTX) //Blockout IR_Reception for the moment
     cli();
@@ -153,9 +149,7 @@ sendraw(uint8_t *msg, uint8_t sync, uint8_t nbyte, uint8_t bitoff,
       rf_moritz_init();
 #endif
 
-#ifndef LED_RGB
   LED_OFF();
-#endif
 }
 
 static int
@@ -342,4 +336,23 @@ ks_send(char *in)
   sendraw(obuf, 10, oby, obi, 3, FS20_PAUSE);
 }
 
+#endif
+
+#ifdef HAS_UNIROLL
+//G0031E368232368hhhhdc1
+//16 bit group-address 4 bit channel-address 4 bit command 1 1-bit
+
+void
+ur_send(char *in)
+{
+  uint8_t hb[4];
+
+  fromhex(in+1, hb, 3);
+  zerohigh = TDIV(1700);
+  zerolow  = TDIV(590);
+  onehigh  = TDIV(540);
+  onelow   = TDIV(1700);
+  hb[3] = 0x80;     //10000000
+  sendraw(hb, 0, 3, 6, 3, 15);
+}
 #endif

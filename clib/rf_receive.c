@@ -443,12 +443,7 @@ RfAnalyze_Task(void)
   if(bucket_nrused == 0)
     return;
 
-#ifdef LED_RGB
-  //led_on(LED_CHANNEL_BLUE);
-  led_signal(LED_CHANNEL_BLUE, 200);
-#else
   LED_ON();
-#endif
 
   b = bucket_array + bucket_out;
 
@@ -603,9 +598,7 @@ RfAnalyze_Task(void)
   if(bucket_out == RCV_BUCKETS)
     bucket_out = 0;
 
-#ifndef LED_RGB
   LED_OFF();
-#endif
 
 #ifdef HAS_FHT_80b
   if(datatype == TYPE_FHT) {
