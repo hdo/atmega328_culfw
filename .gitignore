@@ -1,8 +1,8 @@
 Debug/
 Debug/**/* 
+Devices/**/*.hex
 *.launch
 *.bin
-*.hex
 *.elf
 *.a
 *.o
