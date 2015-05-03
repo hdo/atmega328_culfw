@@ -127,14 +127,14 @@
 #define CC1100_OUT_PORT    PORTB
 #define CC1100_OUT_PIN     0
 
-#define CC1100_IN_DDR		DDRB        // GDO2
-#define CC1100_IN_PORT     PINB
-#define CC1100_IN_PIN      1
+#define CC1100_IN_DDR		DDRD        // GDO2
+#define CC1100_IN_PORT     PIND
+#define CC1100_IN_PIN      2
 
-#define CC1100_INT		INT1
-#define CC1100_INTVECT          INT1_vect
-#define CC1100_ISC		ISC10
-#define CC1100_EICR             EICRA
+#define CC1100_INT			INT0
+#define CC1100_INTVECT     INT0_vect
+#define CC1100_ISC			ISC00
+#define CC1100_EICR        EICRA
 
 #define LED_RGB
 #define LED_DDR                 DDRD
